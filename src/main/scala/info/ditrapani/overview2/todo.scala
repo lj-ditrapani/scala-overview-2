@@ -35,7 +35,7 @@ def todo(items: Vector[Item], input: String): Result =
     case "help" => Result.Continue(items, help)
     case "list" => Result.Continue(items, itemsToLines(items))
     case "add" => addItem(command, items)
-    // case "done" => Continue(done(command))
+    case "done" => done(command, items)
     case "quit" => Result.Exit
     case _ =>
       val lines = error(
@@ -60,6 +60,31 @@ private def error(text: String): List[Line] =
 
 private def itemsToLines(items: Vector[Item]): List[Line] =
   items.zipWithIndex.map { case (item, index) => item.toLine(index) }.toList
+
+private def done(command: Command, items: Vector[Item]): Result =
+        command match
+          case Command.NoArg(_) =>
+            val errorLines = error(
+                "Done command must have space after done with " +
+                    "a valid index that follows.\nExample: done 3"
+            )
+            Result.Continue(items, errorLines)
+          case Command.WithArg(_, arg) =>
+            val maybeItems: Option[Vector[Item]] = for {
+              number <- arg.toIntOption
+              index = number - 1
+              oldItem <- items.lift(index)
+              newItem = Item(oldItem.description, State.Done)
+            } yield items.updated(index, newItem)
+            maybeItems match
+              case None =>
+                val errorLines =
+                  error(
+                    "Done command must have a valid item index"
+                )
+                Result.Continue(items, errorLines)
+              case Some(newItems) =>
+                Result.Continue(newItems, itemsToLines(newItems))
 
 private def parse(line: String): Command =
   val parts = line.trim().nn.split(" ", 2).nn
