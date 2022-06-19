@@ -1,4 +1,4 @@
-package info.ditrapani.overview2
+package info.ditrapani.overview2.line
 
 enum Color:
   case Blue
@@ -6,7 +6,7 @@ enum Color:
   case Red
   case Yellow
 
-def colorize(color: Color, message: String): String =
+def colorize(message: String, color: Color): String =
   val code = color match
     case Color.Blue => "94"
     case Color.Green => "32"
@@ -17,13 +17,19 @@ def colorize(color: Color, message: String): String =
 case class ColoredString(message: String, color: Color)
 
 type Message = String | ColoredString
+type Line = List[Message]
 
-def display(messages: List[Message]): Unit =
-  val output: String = messages
+def display(lines: List[Line]): Unit =
+  lines.foreach { displayLine(_) }
+
+private def lineToString(line: Line): String =
+  line
     .map { message =>
       message match
         case s: String => s
-        case cs: ColoredString => colorize(cs.color, cs.message)
+        case ColoredString(message, color) => colorize(message, color)
     }
     .mkString(" ")
-  println(output)
+
+private def displayLine(line: Line): Unit =
+  println(lineToString(line))
