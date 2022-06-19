@@ -62,29 +62,29 @@ private def itemsToLines(items: Vector[Item]): List[Line] =
   items.zipWithIndex.map { case (item, index) => item.toLine(index) }.toList
 
 private def done(command: Command, items: Vector[Item]): Result =
-        command match
-          case Command.NoArg(_) =>
-            val errorLines = error(
-                "Done command must have space after done with " +
-                    "a valid index that follows.\nExample: done 3"
+  command match
+    case Command.NoArg(_) =>
+      val errorLines = error(
+        "Done command must have space after done with " +
+          "a valid index that follows.\nExample: done 3",
+      )
+      Result.Continue(items, errorLines)
+    case Command.WithArg(_, arg) =>
+      val maybeItems: Option[Vector[Item]] = for {
+        number <- arg.toIntOption
+        index = number - 1
+        oldItem <- items.lift(index)
+        newItem = Item(oldItem.description, State.Done)
+      } yield items.updated(index, newItem)
+      maybeItems match
+        case None =>
+          val errorLines =
+            error(
+              "Done command must have a valid item index",
             )
-            Result.Continue(items, errorLines)
-          case Command.WithArg(_, arg) =>
-            val maybeItems: Option[Vector[Item]] = for {
-              number <- arg.toIntOption
-              index = number - 1
-              oldItem <- items.lift(index)
-              newItem = Item(oldItem.description, State.Done)
-            } yield items.updated(index, newItem)
-            maybeItems match
-              case None =>
-                val errorLines =
-                  error(
-                    "Done command must have a valid item index"
-                )
-                Result.Continue(items, errorLines)
-              case Some(newItems) =>
-                Result.Continue(newItems, itemsToLines(newItems))
+          Result.Continue(items, errorLines)
+        case Some(newItems) =>
+          Result.Continue(newItems, itemsToLines(newItems))
 
 private def parse(line: String): Command =
   val parts = line.trim().nn.split(" ", 2).nn
@@ -96,9 +96,9 @@ private def addItem(command: Command, items: Vector[Item]): Result =
   command match
     case Command.NoArg(_) =>
       val lines = error(
-            "Add command must have space after add with " +
-                "a description that follows.\nExample: add buy hot dogs."
-        )
+        "Add command must have space after add with " +
+          "a description that follows.\nExample: add buy hot dogs.",
+      )
       Result.Continue(items, lines)
     case Command.WithArg(_, arg) =>
       val newItems = items.appended(Item(arg, State.Todo))
