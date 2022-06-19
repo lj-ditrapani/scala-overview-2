@@ -17,3 +17,8 @@ extension [T](x: T | Null)
   */
 inline def optionize[T](input: T | Null): Option[T] =
   Option(input.asInstanceOf[T])
+
+extension (str: String)
+  inline def trimn: String = str.trim.nn
+  inline def splitn(pattern: String, limit: Int): Array[String] =
+    str.split(pattern, limit).nn.map { _.nn }

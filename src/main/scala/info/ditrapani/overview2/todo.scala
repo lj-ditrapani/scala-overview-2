@@ -87,10 +87,10 @@ private def done(command: Command, items: Vector[Item]): Result =
           Result.Continue(newItems, itemsToLines(newItems))
 
 private def parse(line: String): Command =
-  val parts: Array[String] = line.trim().nn.split("\\s+", 2).nn.map { _.nn }
-  parts.size match
-    case 2 => Command.WithArg(parts(0), parts(1).trim().nn)
-    case _ => Command.NoArg(parts(0))
+  val parts = line.trimn.splitn("\\s+", 2)
+  parts match
+    case Array(firstWord, arg) => Command.WithArg(firstWord, arg.trimn)
+    case Array(firstWord) => Command.NoArg(firstWord)
 
 private def addItem(command: Command, items: Vector[Item]): Result =
   command match
