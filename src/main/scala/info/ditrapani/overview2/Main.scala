@@ -1,6 +1,7 @@
 package info.ditrapani.overview2
 
 import scala.annotation.tailrec
+import scala.io.StdIn.readLine
 
 @main def main() =
     println("\nTodo list\n")
@@ -9,9 +10,7 @@ import scala.annotation.tailrec
 
 @tailrec def readEvalPrintLoop(todo: Todo) =
     print("Enter a command. Enter help to list available commands: ")
-    // TODO read input line
-    // val input = readLine()!!
-    val input = "xxx"
+    val input = readLine()
     val result = todo.dispatch(input)
     result match
       case Exit =>
