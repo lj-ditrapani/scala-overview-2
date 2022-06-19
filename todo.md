@@ -1,0 +1,4 @@
+- review code
+- refactor
+- write unit tests
+- test deployment

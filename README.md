@@ -14,12 +14,12 @@ From sbt console you can run these useful commands while you develop:
 Deploying:
 
 Stage a package that you can run
-directly with `target/universal/stage/bin/scala-overview`
+directly with `target/universal/stage/bin/scala-overview-2`
 
     sbt stage
 
 Generate a zip artifact
-packaged here: `target/universal/scala-overview-<version>.zip`
+packaged here: `target/universal/scala-overview-2-<version>.zip`
 
     sbt Universal / packageBin
 
