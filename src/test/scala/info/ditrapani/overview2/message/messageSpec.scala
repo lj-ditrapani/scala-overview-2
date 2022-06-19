@@ -8,7 +8,7 @@ class MessageSpec extends Spec:
       val cString = ColoredString(
         """well...
         hello there""",
-        Color.Yellow
+        Color.Yellow,
       )
       val lines = singleLine(cString)
       lines shouldBe List(List(cString))
@@ -27,7 +27,7 @@ class MessageSpec extends Spec:
         ColoredString("blue", Color.Blue),
       )
       lineToString(line).shouldBe(
-        "default1 \u001B[31mred\u001B[0m \u001B[94mblue\u001B[0m"
+        "default1 \u001B[31mred\u001B[0m \u001B[94mblue\u001B[0m",
       )
     }
   }
