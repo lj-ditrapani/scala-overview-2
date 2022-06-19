@@ -5,15 +5,14 @@ import info.ditrapani.overview.Spec
 class MessageSpec extends Spec:
   "singleLine" - {
     "constructs a List[Line] frome a SoloredString" in {
-      val cString = ColoredString(
+      val str =
         """well...
-        hello there""",
-        Color.Yellow,
-      )
-      val lines = singleLine(cString)
+        hello there"""
+      val lines = singleLine(str, Color.Yellow)
+      val cString = ColoredString(str, Color.Yellow)
       lines shouldBe List(List(cString))
       println("visual test:")
-      display(singleLine(cString))
+      display(lines)
       println("end visual test")
       // This is a visual test.  You must look at the test output.
     }

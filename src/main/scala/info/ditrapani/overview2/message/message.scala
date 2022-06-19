@@ -19,8 +19,8 @@ case class ColoredString(str: String, color: Color)
 type Message = String | ColoredString
 type Line = List[Message]
 
-def singleLine(coloredString: ColoredString): List[Line] =
-  List(List(coloredString))
+def singleLine(str: String, color: Color): List[Line] =
+  List(List(ColoredString(str, color)))
 
 def display(lines: List[Line]): Unit =
   lines.foreach { displayLine(_) }
