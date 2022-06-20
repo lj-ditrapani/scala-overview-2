@@ -16,11 +16,15 @@ def colorize(str: String, color: Color): String =
 
 case class ColoredString(str: String, color: Color)
 
+extension (str: String)
+  def withColor(color: Color): ColoredString =
+    ColoredString(str, color)
+
+  def asOutput(color: Color): List[Line] =
+    List(List(str.withColor(color)))
+
 type Message = String | ColoredString
 type Line = List[Message]
-
-def singleLine(str: String, color: Color): List[Line] =
-  List(List(ColoredString(str, color)))
 
 def display(lines: List[Line]): Unit =
   lines.foreach { displayLine(_) }

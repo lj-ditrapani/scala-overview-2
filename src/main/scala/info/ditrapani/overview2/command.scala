@@ -1,6 +1,6 @@
 package info.ditrapani.overview2
 
-import message.Color
+import message.{Color, asOutput}
 
 sealed trait Command:
   def process(items: Vector[Item]): Result
@@ -17,19 +17,21 @@ object HelpCommand extends Command:
     Result.Continue(items, helpLines)
 
   private val helpLines =
-    val text =
-      """
-      Available commands:
-          help                              Displays this help
-          list                              Display the todo list
-          add <todo item description>       Adds the item to the todo list
-          done <todo item number>           Marks the item as done
-          quit                              Exit the program"""
-    message.singleLine(text, Color.Yellow)
+    """
+    Available commands:
+        help                              Displays this help
+        list                              Display the todo list
+        add <todo item description>       Adds the item to the todo list
+        done <todo item number>           Marks the item as done
+        quit                              Exit the program"""
+      .asOutput(Color.Yellow)
 
 object ListCommand extends Command:
   def process(items: Vector[Item]): Result =
-    Result.Continue(items, itemsToLines(items))
+    val output =
+      if items.length == 0 then "List is empty.  Try adding some items".asOutput(Color.Yellow)
+      else itemsToLines(items)
+    Result.Continue(items, output)
 
 case class AddCommand(arg: String) extends Command:
   def process(items: Vector[Item]): Result =

@@ -1,6 +1,6 @@
 package info.ditrapani.overview2
 
-import message.{Color, ColoredString, Line}
+import message.{asOutput, withColor, Color, Line}
 
 enum Result:
   case Exit
@@ -16,12 +16,12 @@ case class Item(description: String, state: State):
       case State.Todo =>
         List(
           s"${index + 1}",
-          ColoredString(description, Color.Green),
+          description.withColor(Color.Green),
         )
       case State.Done =>
         List(
           s"${index + 1}",
-          ColoredString(description, Color.Blue),
+          description.withColor(Color.Blue),
           "(done)",
         )
 
@@ -29,7 +29,7 @@ def todo(items: Vector[Item], input: String): Result =
   parse(input).process(items)
 
 private def error(text: String): List[Line] =
-  message.singleLine(text, Color.Red)
+  text.asOutput(Color.Red)
 
 private def itemsToLines(items: Vector[Item]): List[Line] =
   items.zipWithIndex.map { case (item, index) => item.toLine(index) }.toList
