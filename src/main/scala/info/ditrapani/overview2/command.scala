@@ -13,10 +13,7 @@ object Command:
   val quit = "quit"
 
 object HelpCommand extends Command:
-  def process(items: Vector[Item]): Result =
-    Result.Continue(output, items)
-
-  private val output =
+  val output =
     """
     Available commands:
         help                              Displays this help
@@ -25,18 +22,21 @@ object HelpCommand extends Command:
         done <todo item number>           Marks the item as done
         quit                              Exit the program"""
       .asOutput(Color.Yellow)
+  def process(items: Vector[Item]): Result =
+    Result.Continue(output, items)
 
 object ListCommand extends Command:
+  val emptyListHint = "List is empty.  Try adding some items".asOutput(Color.Yellow)
   def process(items: Vector[Item]): Result =
     val output =
-      if items.length == 0 then "List is empty.  Try adding some items".asOutput(Color.Yellow)
-      else items.toLines
+      if items.length == 0 then emptyListHint
+      else items.toOutput
     Result.Continue(output, items)
 
 case class AddCommand(arg: String) extends Command:
   def process(items: Vector[Item]): Result =
     val newItems = items.appended(Item(arg, State.Todo))
-    Result.Continue(newItems.toLines, newItems)
+    Result.Continue(newItems.toOutput, newItems)
 
 case class DoneCommand(arg: String) extends Command:
   def process(items: Vector[Item]): Result =
@@ -51,7 +51,7 @@ case class DoneCommand(arg: String) extends Command:
         val output = error("Done command must have a valid item index")
         Result.Continue(output, items)
       case Some(newItems) =>
-        Result.Continue(newItems.toLines, newItems)
+        Result.Continue(newItems.toOutput, newItems)
 
 object QuitCommand extends Command:
   def process(items: Vector[Item]): Result =
@@ -68,7 +68,7 @@ case class MissingArgCommand(commandName: String) extends Command:
     Result.Continue(output, items)
 
 object UnknownCommand extends Command:
+  val output =
+    error("I do not understand your command.  Enter help to display available commands.")
   def process(items: Vector[Item]): Result =
-    val output =
-      error("I do not understand your command.  Enter help to display available commands.")
     Result.Continue(output, items)

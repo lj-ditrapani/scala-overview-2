@@ -51,5 +51,5 @@ private def error(text: String): Output =
   text.asOutput(Color.Red)
 
 extension (items: Vector[Item])
-  def toLines: Output =
+  def toOutput: Output =
     items.zipWithIndex.map { case (item, index) => item.toLine(index) }.toList
