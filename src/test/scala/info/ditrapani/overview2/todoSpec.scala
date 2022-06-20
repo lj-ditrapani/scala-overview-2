@@ -67,9 +67,8 @@ class TodoSpec extends Spec:
     "when parsing input" - {
       "handles tabs and trims off whitespace before and after both command word and arg" in {
         val newItems = items.appended(Item("brew tea", State.Todo))
-        todo(items, "\t  add\t\t  brew tea\t \t") shouldBe Result.Continue(
-          newItems.toOutput,
-          newItems,
+        todo(items, "\t  add\t\t  brew tea\t \t").shouldBe(
+          Result.Continue(newItems.toOutput, newItems),
         )
       }
     }
