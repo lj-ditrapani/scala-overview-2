@@ -7,7 +7,7 @@ enum Color:
   case Yellow
 
 private case class ColoredString(str: String, color: Color):
-  def toRawString: String =
+  def show: String =
     val code = color match
       case Color.Blue => "94"
       case Color.Green => "32"
@@ -26,14 +26,15 @@ extension (str: String)
   def asOutput(color: Color): Output =
     List(List(str.withColor(color)))
 
-def display(output: Output): Unit =
-  output.foreach { line => println(lineToString(line)) }
+extension (line: Line)
+  def show: String =
+    line
+      .map { text =>
+        text match
+          case s: String => s
+          case cs: ColoredString => cs.show
+      }
+      .mkString(" ")
 
-private[output] def lineToString(line: Line): String =
-  line
-    .map { text =>
-      text match
-        case s: String => s
-        case cs: ColoredString => cs.toRawString
-    }
-    .mkString(" ")
+def display(output: Output): Unit =
+  output.foreach { line => println(line.show) }

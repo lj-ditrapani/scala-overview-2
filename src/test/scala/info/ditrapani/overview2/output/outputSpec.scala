@@ -18,14 +18,14 @@ class OuputSpec extends Spec:
     }
   }
 
-  "lineToString" - {
+  "Line.show" - {
     "converts a single line into a colorized String ready to be printed" in {
       val line = List[Text](
         "default1",
         "red".withColor(Color.Red),
         "blue".withColor(Color.Blue),
       )
-      lineToString(line).shouldBe(
+      line.show.shouldBe(
         "default1 \u001B[31mred\u001B[0m \u001B[94mblue\u001B[0m",
       )
     }

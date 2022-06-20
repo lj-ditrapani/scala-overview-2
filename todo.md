@@ -2,5 +2,3 @@
 - test deployment
 - Update readme (see kotlin & typescript versions)
 - compare with kotlin & typescript versions
-- consider Line.toRawString extension?
-- itemsToLines as extension method?  Vector[Item].toOutput?

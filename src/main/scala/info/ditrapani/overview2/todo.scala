@@ -28,12 +28,6 @@ case class Item(description: String, state: State):
 def todo(items: Vector[Item], input: String): Result =
   parse(input).process(items)
 
-private def error(text: String): Output =
-  text.asOutput(Color.Red)
-
-private def itemsToLines(items: Vector[Item]): Output =
-  items.zipWithIndex.map { case (item, index) => item.toLine(index) }.toList
-
 private def parse(input: String): Command =
   val parts = input.trimn.splitn("\\s+", 2)
   parts match
@@ -52,3 +46,10 @@ private def parse(input: String): Command =
         case Command.add | Command.done =>
           MissingArgCommand(firstWord)
         case _ => UnknownCommand
+
+private def error(text: String): Output =
+  text.asOutput(Color.Red)
+
+extension (items: Vector[Item])
+  def toLines: Output =
+    items.zipWithIndex.map { case (item, index) => item.toLine(index) }.toList
