@@ -56,8 +56,21 @@ class TodoSpec extends Spec:
       todo(items, "add") shouldBe Result.Continue(output, items)
     }
 
-    "when the input is an unknown command, returns a helpful error" in {
-      val output = error("`add` command requires an argument")
+    "when the input is a 0-arg unknown command, returns a helpful error" in {
+      todo(items, "cull") shouldBe Result.Continue(UnknownCommand.output, items)
+    }
+
+    "when the input is a 1-arg unknown command, returns a helpful error" in {
       todo(items, "brew tea") shouldBe Result.Continue(UnknownCommand.output, items)
+    }
+
+    "when parsing input" - {
+      "handles tabs and trims off whitespace before and after both command word and arg" in {
+        val newItems = items.appended(Item("brew tea", State.Todo))
+        todo(items, "\t  add\t\t  brew tea\t \t") shouldBe Result.Continue(
+          newItems.toOutput,
+          newItems,
+        )
+      }
     }
   }
