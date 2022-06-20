@@ -14,9 +14,9 @@ object Command:
 
 object HelpCommand extends Command:
   def process(items: Vector[Item]): Result =
-    Result.Continue(helpLines, items)
+    Result.Continue(output, items)
 
-  private val helpLines =
+  private val output =
     """
     Available commands:
         help                              Displays this help

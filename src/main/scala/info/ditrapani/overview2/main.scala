@@ -1,5 +1,6 @@
 package info.ditrapani.overview2
 
+import output.display
 import scala.annotation.tailrec
 import scala.io.StdIn.readLine
 
@@ -12,6 +13,6 @@ import scala.io.StdIn.readLine
   todo(items, input) match
     case Result.Exit =>
       (): Unit
-    case Result.Continue(lines, newItems) =>
-      output.display(lines)
+    case Result.Continue(output, newItems) =>
+      display(output)
       readEvalPrintLoop(newItems)
