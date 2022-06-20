@@ -1,4 +1,4 @@
-package info.ditrapani.overview2.message
+package info.ditrapani.overview2.output
 
 enum Color:
   case Blue
@@ -14,7 +14,11 @@ def colorize(str: String, color: Color): String =
     case Color.Yellow => "33"
   s"\u001B[${code}m${str}\u001B[0m"
 
-case class ColoredString(str: String, color: Color)
+private case class ColoredString(str: String, color: Color)
+
+type Text = String | ColoredString
+type Line = List[Text]
+type Output = List[Line]
 
 extension (str: String)
   def withColor(color: Color): ColoredString =
@@ -23,20 +27,14 @@ extension (str: String)
   def asOutput(color: Color): List[Line] =
     List(List(str.withColor(color)))
 
-type Message = String | ColoredString
-type Line = List[Message]
-
 def display(lines: List[Line]): Unit =
-  lines.foreach { displayLine(_) }
+  lines.foreach { line => println(lineToString(line)) }
 
-private[message] def lineToString(line: Line): String =
+private[output] def lineToString(line: Line): String =
   line
-    .map { message =>
-      message match
+    .map { text =>
+      text match
         case s: String => s
         case ColoredString(str, color) => colorize(str, color)
     }
     .mkString(" ")
-
-private def displayLine(line: Line): Unit =
-  println(lineToString(line))

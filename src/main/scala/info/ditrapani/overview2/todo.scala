@@ -1,6 +1,6 @@
 package info.ditrapani.overview2
 
-import message.{asOutput, withColor, Color, Line}
+import output.{asOutput, withColor, Color, Line}
 
 enum Result:
   case Exit

@@ -1,8 +1,8 @@
-package info.ditrapani.overview2.message
+package info.ditrapani.overview2.output
 
 import info.ditrapani.overview.Spec
 
-class MessageSpec extends Spec:
+class OuputSpec extends Spec:
   "String.asOutput" - {
     "constructs a List[Line] frome a SoloredString" in {
       val str =
@@ -20,7 +20,7 @@ class MessageSpec extends Spec:
 
   "lineToString" - {
     "converts a single line into a colorized String ready to be printed" in {
-      val line = List[Message](
+      val line = List[Text](
         "default1",
         "red".withColor(Color.Red),
         "blue".withColor(Color.Blue),
@@ -32,20 +32,21 @@ class MessageSpec extends Spec:
   }
 
   "display" - {
-    "colors and prints out the messages" in {
-      val line1 = List[Message](
+    "colors and prints out the output lines" in {
+      val line1 = List[Text](
         "default1",
         "red".withColor(Color.Red),
         "yellow".withColor(Color.Yellow),
         "default2",
       )
-      val line2 = List[Message](
+      val line2 = List[Text](
         "blue".withColor(Color.Blue),
         "green".withColor(Color.Green),
         "default3",
       )
+      val output: Output = List(line1, line2)
       println("visual test:")
-      display(List(line1, line2))
+      display(output)
       println("end visual test")
       // This is a visual test.  You must look at the test output.
     }

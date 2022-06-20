@@ -1,6 +1,6 @@
 package info.ditrapani.overview2
 
-import message.{Color, asOutput}
+import output.{Color, asOutput}
 
 sealed trait Command:
   def process(items: Vector[Item]): Result

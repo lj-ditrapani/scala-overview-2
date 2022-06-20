@@ -13,5 +13,5 @@ import scala.io.StdIn.readLine
     case Result.Exit =>
       (): Unit
     case Result.Continue(newItems, lines) =>
-      message.display(lines)
+      output.display(lines)
       readEvalPrintLoop(newItems)
