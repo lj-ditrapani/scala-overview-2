@@ -1,8 +1,6 @@
-- refactor
 - write unit tests
 - test deployment
 - Update readme (see kotlin & typescript versions)
 - compare with kotlin & typescript versions
-- use Output type
 - consider Line.toRawString extension?
 - itemsToLines as extension method?  Vector[Item].toOutput?

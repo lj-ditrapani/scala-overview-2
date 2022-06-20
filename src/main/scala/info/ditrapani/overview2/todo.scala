@@ -28,10 +28,10 @@ case class Item(description: String, state: State):
 def todo(items: Vector[Item], input: String): Result =
   parse(input).process(items)
 
-private def error(text: String): List[Line] =
+private def error(text: String): Output =
   text.asOutput(Color.Red)
 
-private def itemsToLines(items: Vector[Item]): List[Line] =
+private def itemsToLines(items: Vector[Item]): Output =
   items.zipWithIndex.map { case (item, index) => item.toLine(index) }.toList
 
 private def parse(input: String): Command =
