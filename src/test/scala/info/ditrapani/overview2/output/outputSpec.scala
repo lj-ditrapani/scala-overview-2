@@ -4,15 +4,15 @@ import info.ditrapani.overview.Spec
 
 class OuputSpec extends Spec:
   "String.asOutput" - {
-    "constructs a List[Line] frome a SoloredString" in {
+    "constructs an Output from a ColoredString" in {
       val str =
         """well...
         hello there"""
-      val lines = str.asOutput(Color.Yellow)
+      val output = str.asOutput(Color.Yellow)
       val cString = str.withColor(Color.Yellow)
-      lines shouldBe List(List(cString))
+      output shouldBe List(List(cString))
       println("visual test:")
-      display(lines)
+      display(output)
       println("end visual test")
       // This is a visual test.  You must look at the test output.
     }

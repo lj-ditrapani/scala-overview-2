@@ -4,7 +4,7 @@ import output.{asOutput, withColor, Color, Line, Output}
 
 enum Result:
   case Exit
-  case Continue(lines: Output, items: Vector[Item])
+  case Continue(output: Output, items: Vector[Item])
 
 enum State:
   case Todo
@@ -34,8 +34,8 @@ private def error(text: String): List[Line] =
 private def itemsToLines(items: Vector[Item]): List[Line] =
   items.zipWithIndex.map { case (item, index) => item.toLine(index) }.toList
 
-private def parse(line: String): Command =
-  val parts = line.trimn.splitn("\\s+", 2)
+private def parse(input: String): Command =
+  val parts = input.trimn.splitn("\\s+", 2)
   parts match
     case Array(firstWord, arg) =>
       firstWord match

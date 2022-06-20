@@ -5,5 +5,4 @@
 - compare with kotlin & typescript versions
 - use Output type
 - consider Line.toRawString extension?
-- flip lines and items params
 - itemsToLines as extension method?  Vector[Item].toOutput?
