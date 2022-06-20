@@ -2,11 +2,11 @@ package info.ditrapani.overview2
 
 import message.Color
 
-sealed trait Command2:
+sealed trait Command:
   val name: String
   def process(items: Vector[Item]): Result
 
-object HelpCommand extends Command2:
+object HelpCommand extends Command:
   val name = "help"
 
   def process(items: Vector[Item]): Result =
@@ -23,18 +23,18 @@ object HelpCommand extends Command2:
           quit                              Exit the program"""
     message.singleLine(text, Color.Yellow)
 
-object ListCommand extends Command2:
+object ListCommand extends Command:
   val name = "help"
   def process(items: Vector[Item]): Result =
     Result.Continue(items, itemsToLines(items))
 
-case class AddCommand(arg: String) extends Command2:
+case class AddCommand(arg: String) extends Command:
   val name = "add"
   def process(items: Vector[Item]): Result =
     val newItems = items.appended(Item(arg, State.Todo))
     Result.Continue(newItems, itemsToLines(newItems))
 
-case class DoneCommand(arg: String) extends Command2:
+case class DoneCommand(arg: String) extends Command:
   val name = "done"
   def process(items: Vector[Item]): Result =
     val maybeItems: Option[Vector[Item]] = for {
@@ -50,10 +50,19 @@ case class DoneCommand(arg: String) extends Command2:
       case Some(newItems) =>
         Result.Continue(newItems, itemsToLines(newItems))
 
-object QuitCommand extends Command2:
+object QuitCommand extends Command:
   val name = "quit"
   def process(items: Vector[Item]): Result =
     Result.Exit
+
+object UnknownCommand extends Command:
+  val name = "unknown"
+  def process(items: Vector[Item]): Result =
+    val lines = error(
+      "I do not understand your command.  " +
+        "Enter help to display available commands.",
+    )
+    Result.Continue(items, lines)
 
 object DoneCommand:
   def missingArg(items: Vector[Item]) =
