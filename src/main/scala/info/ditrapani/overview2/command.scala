@@ -3,16 +3,20 @@ package info.ditrapani.overview2
 import message.Color
 
 sealed trait Command:
-  val name: String
   def process(items: Vector[Item]): Result
 
+object Command:
+  val help = "help"
+  val list = "list"
+  val add = "add"
+  val done = "done"
+  val quit = "quit"
+
 object HelpCommand extends Command:
-  val name = "help"
-
   def process(items: Vector[Item]): Result =
-    Result.Continue(items, help)
+    Result.Continue(items, helpLines)
 
-  private val help =
+  private val helpLines =
     val text =
       """
       Available commands:
@@ -24,18 +28,15 @@ object HelpCommand extends Command:
     message.singleLine(text, Color.Yellow)
 
 object ListCommand extends Command:
-  val name = "help"
   def process(items: Vector[Item]): Result =
     Result.Continue(items, itemsToLines(items))
 
 case class AddCommand(arg: String) extends Command:
-  val name = "add"
   def process(items: Vector[Item]): Result =
     val newItems = items.appended(Item(arg, State.Todo))
     Result.Continue(newItems, itemsToLines(newItems))
 
 case class DoneCommand(arg: String) extends Command:
-  val name = "done"
   def process(items: Vector[Item]): Result =
     val maybeItems: Option[Vector[Item]] = for {
       number <- arg.toIntOption
@@ -51,31 +52,23 @@ case class DoneCommand(arg: String) extends Command:
         Result.Continue(newItems, itemsToLines(newItems))
 
 object QuitCommand extends Command:
-  val name = "quit"
   def process(items: Vector[Item]): Result =
     Result.Exit
 
+case class UnexpectedArgCommand(commandName: String) extends Command:
+  def process(items: Vector[Item]): Result =
+    val lines = error(s"`$commandName` command does not take any arguments")
+    Result.Continue(items, lines)
+
+case class MissingArgCommand(commandName: String) extends Command:
+  def process(items: Vector[Item]): Result =
+    val lines = error(s"`$commandName` command requires an argument")
+    Result.Continue(items, lines)
+
 object UnknownCommand extends Command:
-  val name = "unknown"
   def process(items: Vector[Item]): Result =
     val lines = error(
       "I do not understand your command.  " +
         "Enter help to display available commands.",
-    )
-    Result.Continue(items, lines)
-
-object DoneCommand:
-  def missingArg(items: Vector[Item]) =
-    val lines = error(
-      "Done command must have space after `done` with " +
-        "a valid item index that follows.\nExample: done 3",
-    )
-    Result.Continue(items, lines)
-
-object AddCommand:
-  def missingArg(items: Vector[Item]) =
-    val lines = error(
-      "Add command must have space after `add` with " +
-        "a description that follows.\nExample: add buy hot dogs.",
     )
     Result.Continue(items, lines)

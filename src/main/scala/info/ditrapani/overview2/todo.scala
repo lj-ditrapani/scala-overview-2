@@ -39,12 +39,16 @@ private def parse(line: String): Command =
   parts match
     case Array(firstWord, arg) =>
       firstWord match
-        case "add" => AddCommand(arg)
-        case "done" => DoneCommand(arg)
+        case Command.add => AddCommand(arg)
+        case Command.done => DoneCommand(arg)
+        case Command.help | Command.list | Command.quit =>
+          UnexpectedArgCommand(firstWord)
         case _ => UnknownCommand
     case Array(firstWord) =>
       firstWord match
-        case "help" => HelpCommand
-        case "list" => ListCommand
-        case "quit" => QuitCommand
+        case Command.help => HelpCommand
+        case Command.list => ListCommand
+        case Command.quit => QuitCommand
+        case Command.add | Command.done =>
+          MissingArgCommand(firstWord)
         case _ => UnknownCommand
