@@ -31,24 +31,24 @@ object ListCommand extends Command2:
 case class AddCommand(arg: String) extends Command2:
   val name = "add"
   def process(items: Vector[Item]): Result =
-      val newItems = items.appended(Item(arg, State.Todo))
-      Result.Continue(newItems, itemsToLines(newItems))
+    val newItems = items.appended(Item(arg, State.Todo))
+    Result.Continue(newItems, itemsToLines(newItems))
 
 case class DoneCommand(arg: String) extends Command2:
   val name = "done"
   def process(items: Vector[Item]): Result =
-      val maybeItems: Option[Vector[Item]] = for {
-        number <- arg.toIntOption
-        index = number - 1
-        oldItem <- items.lift(index)
-        newItem = Item(oldItem.description, State.Done)
-      } yield items.updated(index, newItem)
-      maybeItems match
-        case None =>
-          val lines = error("Done command must have a valid item index")
-          Result.Continue(items, lines)
-        case Some(newItems) =>
-          Result.Continue(newItems, itemsToLines(newItems))
+    val maybeItems: Option[Vector[Item]] = for {
+      number <- arg.toIntOption
+      index = number - 1
+      oldItem <- items.lift(index)
+      newItem = Item(oldItem.description, State.Done)
+    } yield items.updated(index, newItem)
+    maybeItems match
+      case None =>
+        val lines = error("Done command must have a valid item index")
+        Result.Continue(items, lines)
+      case Some(newItems) =>
+        Result.Continue(newItems, itemsToLines(newItems))
 
 object QuitCommand extends Command2:
   val name = "quit"
@@ -57,16 +57,16 @@ object QuitCommand extends Command2:
 
 object DoneCommand:
   def missingArg(items: Vector[Item]) =
-      val lines = error(
-        "Done command must have space after `done` with " +
-          "a valid item index that follows.\nExample: done 3",
-      )
-      Result.Continue(items, lines)
+    val lines = error(
+      "Done command must have space after `done` with " +
+        "a valid item index that follows.\nExample: done 3",
+    )
+    Result.Continue(items, lines)
 
 object AddCommand:
   def missingArg(items: Vector[Item]) =
-      val lines = error(
-        "Add command must have space after `add` with " +
-          "a description that follows.\nExample: add buy hot dogs.",
-      )
-      Result.Continue(items, lines)
+    val lines = error(
+      "Add command must have space after `add` with " +
+        "a description that follows.\nExample: add buy hot dogs.",
+    )
+    Result.Continue(items, lines)
