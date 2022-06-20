@@ -9,8 +9,7 @@ import scala.io.StdIn.readLine
 
 @tailrec def readEvalPrintLoop(items: Vector[Item]): Unit =
   val input = readLine("Enter a command. Enter help to list available commands: ")
-  val result = todo(items, input)
-  result match
+  todo(items, input) match
     case Result.Exit =>
       (): Unit
     case Result.Continue(newItems, lines) =>

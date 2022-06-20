@@ -14,12 +14,12 @@ case class Item(description: String, state: State):
   def toLine(index: Int): Line =
     state match
       case State.Todo =>
-        List[Message](
+        List(
           s"${index + 1}",
           ColoredString(description, Color.Green),
         )
       case State.Done =>
-        List[Message](
+        List(
           s"${index + 1}",
           ColoredString(description, Color.Blue),
           "(done)",
