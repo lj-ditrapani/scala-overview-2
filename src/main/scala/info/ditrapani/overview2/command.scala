@@ -14,7 +14,7 @@ object Command:
 
 object HelpCommand extends Command:
   def process(items: Vector[Item]): Result =
-    Result.Continue(items, helpLines)
+    Result.Continue(helpLines, items)
 
   private val helpLines =
     """
@@ -31,12 +31,12 @@ object ListCommand extends Command:
     val output =
       if items.length == 0 then "List is empty.  Try adding some items".asOutput(Color.Yellow)
       else itemsToLines(items)
-    Result.Continue(items, output)
+    Result.Continue(output, items)
 
 case class AddCommand(arg: String) extends Command:
   def process(items: Vector[Item]): Result =
     val newItems = items.appended(Item(arg, State.Todo))
-    Result.Continue(newItems, itemsToLines(newItems))
+    Result.Continue(itemsToLines(newItems), newItems)
 
 case class DoneCommand(arg: String) extends Command:
   def process(items: Vector[Item]): Result =
@@ -48,10 +48,10 @@ case class DoneCommand(arg: String) extends Command:
     } yield items.updated(index, newItem)
     maybeItems match
       case None =>
-        val lines = error("Done command must have a valid item index")
-        Result.Continue(items, lines)
+        val output = error("Done command must have a valid item index")
+        Result.Continue(output, items)
       case Some(newItems) =>
-        Result.Continue(newItems, itemsToLines(newItems))
+        Result.Continue(itemsToLines(newItems), newItems)
 
 object QuitCommand extends Command:
   def process(items: Vector[Item]): Result =
@@ -59,18 +59,18 @@ object QuitCommand extends Command:
 
 case class UnexpectedArgCommand(commandName: String) extends Command:
   def process(items: Vector[Item]): Result =
-    val lines = error(s"`$commandName` command does not take any arguments")
-    Result.Continue(items, lines)
+    val output = error(s"`$commandName` command does not take any arguments")
+    Result.Continue(output, items)
 
 case class MissingArgCommand(commandName: String) extends Command:
   def process(items: Vector[Item]): Result =
-    val lines = error(s"`$commandName` command requires an argument")
-    Result.Continue(items, lines)
+    val output = error(s"`$commandName` command requires an argument")
+    Result.Continue(output, items)
 
 object UnknownCommand extends Command:
   def process(items: Vector[Item]): Result =
-    val lines = error(
+    val output = error(
       "I do not understand your command.  " +
         "Enter help to display available commands.",
     )
-    Result.Continue(items, lines)
+    Result.Continue(output, items)

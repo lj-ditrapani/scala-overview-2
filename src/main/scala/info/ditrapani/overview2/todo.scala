@@ -1,10 +1,10 @@
 package info.ditrapani.overview2
 
-import output.{asOutput, withColor, Color, Line}
+import output.{asOutput, withColor, Color, Line, Output}
 
 enum Result:
   case Exit
-  case Continue(items: Vector[Item], lines: List[Line])
+  case Continue(lines: Output, items: Vector[Item])
 
 enum State:
   case Todo

@@ -12,6 +12,6 @@ import scala.io.StdIn.readLine
   todo(items, input) match
     case Result.Exit =>
       (): Unit
-    case Result.Continue(newItems, lines) =>
+    case Result.Continue(lines, newItems) =>
       output.display(lines)
       readEvalPrintLoop(newItems)
