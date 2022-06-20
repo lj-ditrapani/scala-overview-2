@@ -1,6 +1,6 @@
 package info.ditrapani.overview2
 
-import message.{Color, ColoredString, Line, Message}
+import message.{Color, ColoredString, Line}
 
 enum Result:
   case Exit
@@ -26,8 +26,8 @@ case class Item(description: String, state: State):
         )
 
 enum Command(val firstWord: String):
-  case NoArg(fw: String) extends Command(fw)
-  case WithArg(fw: String, val arg: String) extends Command(fw)
+  case NoArg(word: String) extends Command(word)
+  case WithArg(word: String, arg: String) extends Command(word)
 
 def todo(items: Vector[Item], input: String): Result =
   val command = parse(input)
@@ -64,11 +64,11 @@ private def itemsToLines(items: Vector[Item]): List[Line] =
 private def done(command: Command, items: Vector[Item]): Result =
   command match
     case Command.NoArg(_) =>
-      val errorLines = error(
+      val lines = error(
         "Done command must have space after done with " +
-          "a valid index that follows.\nExample: done 3",
+          "a valid item index that follows.\nExample: done 3",
       )
-      Result.Continue(items, errorLines)
+      Result.Continue(items, lines)
     case Command.WithArg(_, arg) =>
       val maybeItems: Option[Vector[Item]] = for {
         number <- arg.toIntOption
@@ -78,11 +78,8 @@ private def done(command: Command, items: Vector[Item]): Result =
       } yield items.updated(index, newItem)
       maybeItems match
         case None =>
-          val errorLines =
-            error(
-              "Done command must have a valid item index",
-            )
-          Result.Continue(items, errorLines)
+          val lines = error("Done command must have a valid item index")
+          Result.Continue(items, lines)
         case Some(newItems) =>
           Result.Continue(newItems, itemsToLines(newItems))
 
@@ -96,7 +93,7 @@ private def addItem(command: Command, items: Vector[Item]): Result =
   command match
     case Command.NoArg(_) =>
       val lines = error(
-        "Add command must have space after add with " +
+        "Add command must have space after `add` with " +
           "a description that follows.\nExample: add buy hot dogs.",
       )
       Result.Continue(items, lines)
