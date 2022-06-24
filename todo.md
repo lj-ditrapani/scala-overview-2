@@ -1,6 +1,3 @@
-- write unit tests
-    - error
-    - Items.toOuput
 - Update readme (see kotlin & typescript versions)
 - compare with kotlin & typescript versions
 - dockerize

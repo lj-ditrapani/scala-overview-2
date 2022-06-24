@@ -1,6 +1,7 @@
 package info.ditrapani.overview2
 
 import info.ditrapani.overview.Spec
+import output.{Color, withColor}
 
 class TodoSpec extends Spec:
   "todo" - {
@@ -71,5 +72,24 @@ class TodoSpec extends Spec:
           Result.Continue(newItems.toOutput, newItems),
         )
       }
+    }
+  }
+
+  "error" - {
+    "wrap the text in red-colored output" in {
+      error("myerror") shouldBe List(List("myerror".withColor(Color.Red)))
+    }
+  }
+
+  "Vector[Item].toOuput" - {
+    "transform items into output to be displayed" in {
+      val items: Vector[Item] = Vector[Item](
+        Item("one", State.Todo),
+        Item("two", State.Done),
+      )
+      items.toOutput shouldBe List(
+        List("1", "one".withColor(Color.Green)),
+        List("2", "two".withColor(Color.Blue), "(done)"),
+      )
     }
   }
