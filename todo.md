@@ -1,3 +1,2 @@
-- Update readme (see kotlin & typescript versions)
 - compare with kotlin & typescript versions
 - dockerize
