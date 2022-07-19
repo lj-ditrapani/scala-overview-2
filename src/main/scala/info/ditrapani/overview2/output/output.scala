@@ -9,7 +9,7 @@ enum Color:
 private case class ColoredString(str: String, color: Color):
   def show: String =
     val code = color match
-      case Color.Blue => "94"
+      case Color.Blue => "34"
       case Color.Green => "32"
       case Color.Red => "31"
       case Color.Yellow => "33"

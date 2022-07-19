@@ -26,7 +26,7 @@ class OuputSpec extends Spec:
         "blue".withColor(Color.Blue),
       )
       line.show.shouldBe(
-        "default1 \u001B[31mred\u001B[0m \u001B[94mblue\u001B[0m",
+        "default1 \u001B[31mred\u001B[0m \u001B[34mblue\u001B[0m",
       )
     }
   }
